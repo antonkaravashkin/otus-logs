@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 
 
 regex = r"^(\S*).*\[(.*)\]\s\"(\S*)\s(\S*)\s([^\"]*)\"\s(\S*)\s(\S*)\s\"([^\"]*)\"\s\"([^\"]*)\"\s(\S*)$"
@@ -17,11 +18,11 @@ test_str = ("46.72.177.4 - - [12/Dec/2015:18:31:08 +0100] \"POST /administrator/
             "95.140.24.131 - - [12/Dec/2015:18:38:42 +0100] \"GET /administrator/ HTTP/1.1\" 200 4263 \"-\" \"Mozilla/5.0 (Windows NT 6.0; rv:34.0) Gecko/20100101 Firefox/34.0\" 5144\n"
             "95.140.24.131 - - [12/Dec/2015:18:38:42 +0100] \"POST /administrator/index.php HTTP/1.1\" 200 4494 \"http://almhuette-raith.at/administrator/\" \"Mozilla/5.0 (Windows NT 6.0; rv:34.0) Gecko/20100101 Firefox/34.0\" 4225\n")
 
-closures = re.finditer(regex, test_str, re.MULTILINE)
+# closures = re.finditer(regex, test_str, re.MULTILINE)
 
-for matchNum, match in enumerate(closures, start=1):
-        z = match.groups()[1]
-        print(type(z))
+# for matchNum, match in enumerate(closures, start=1):
+#         z = match.groups()[0]
+
     
     
     # for groupNum in range(0, len(match.groups())):
@@ -46,3 +47,14 @@ for matchNum, match in enumerate(closures, start=1):
 # print(requests_count(closures, 1))
 
 # print(requests_start(closures, 3))
+
+
+matches = re.finditer(regex, test_str, re.MULTILINE)
+
+for matchNum, match in enumerate(matches, start=1):
+    # print ("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum = matchNum, start = match.start(), end = match.end(), match = match.group()))
+    for groupNum in range(0, len(match.groups())):
+        groupNum = groupNum + 1
+        group = match.group(groupNum)
+        print(group)
+        # print ("Group {groupNum} found at {start}-{end}: {group}".format(groupNum = groupNum, start = match.start(groupNum), end = match.end(groupNum), group = match.group(groupNum)))
