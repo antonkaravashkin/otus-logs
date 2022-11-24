@@ -1,59 +1,59 @@
 import re
-import sys
 from heapq import nlargest
 import argparse
 from collections import Counter
 
-# Using argparse for reading arguments is pretty cool.
-# We get defualt help, argument types, and a lot more done :-)
-# Refer = http://docs.python.org/dev/library/argparse.html
-parser = argparse.ArgumentParser(description='A very simple Apache access log parser')
 
-# A readable log file is a required argument and the file is automagically read too.
+parser = argparse.ArgumentParser(
+    description='Лаг парсер, на примере acces.log')
+
 parser.add_argument('log_file', metavar='LOG_FILE', type=argparse.FileType('r'),
-                   help='Path to the Apache log file')
+                    help='Указывает путь до файла с логом')
 
 
-# Regex for the common Apache log format.
 parts = [
-    r'(?P<ip>\S*)',                   # host %h
-    r'(?P<remote_log_name>.*?)',                             # indent %l (unused)
-    r'(?P<userid>.*?)',                   # user %u
-    r'\[(?P<time>.*?)\]',                # time %t
-    r'(?P<request>.*?)',               # request "%r"
-    r'(?P<path>.*?)'
-    r'(?P<status>[0-9]+)',              # status %>s
-    r'(?P<size>.*?)',                   # size %b (careful, can be '-')
-    r'"(?P<referrer>.*?)"',              # referrer "%{Referer}i"
-    r'"(?P<agent>.*)"',                 # user agent "%{User-agent}i"
+    r'(?P<ip>\S*)',
+    r'(?P<remote_log_name>.*?)',
+    r'(?P<userid>.*?)',
+    r'\[(?P<time>.*?)\]',
+    r'(?P<request>.*?)',
+    r'(?P<path>.*?)',
+    r'(?P<status>[0-9]+)',
+    r'(?P<size>.*?)',
+    r'"(?P<referrer>.*?)"',
+    r'"(?P<agent>.*)"',
     r'(?P<time_micro>.*)',
 ]
+
 pattern = re.compile(r'\s+'.join(parts)+r'\s*\Z')
 
-# Initiazlie required variables
+
 args = parser.parse_args()
 log_data = []
 
-# Get components from each line of the log file into a structured dict
-for line in args.log_file:
-  log_data.append(pattern.match(line).groupdict())
 
-# Using a counter to get stats on the status in log entries
-# Refer = http://docs.python.org/2/library/collections.html#collections.Counter
+for line in args.log_file:
+    log_data.append(pattern.match(line).groupdict())
+
+
 common_requests = len(log_data)
 reques_method = Counter(x['request'] for x in log_data)
 ips = Counter(x['ip'] for x in log_data)
-lognest_requests = Counter(x['time_micro'] for x in log_data)
+lognest_requests = Counter(int(x['time_micro']) for x in log_data)
+z = nlargest(3, lognest_requests)
+group_files = (x for x in log_data if int(x['time_micro']) in z)
 
-# Printing the STATUS count sorted by highest to lowest count
+
 print(f"Всего запросов в лог файле: {common_requests}")
+
 print("Количество запросов по HTTP-методам: ")
 for x in reques_method.most_common():
-  print("\t%s Встречается %d раз" % x)
+    print("\t%s Встречается %d раз" % x)
+
 print("Top 3 IP адресов, с которых были сделаны запросы: ")
 for x in ips.most_common(3):
-  print("\t%s стучался к нам %d раз" % x)
+    print("\t%s стучался к нам %d раз" % x)
 
-for x in nlargest(3, lognest_requests):
-  print("\t%s время выполнения" % x)
-  print(x)
+print("Top 3 самых длительных запросов: ")
+for i in sorted(group_files, reverse=False, key=lambda x: x['time_micro'])[:3]:
+    print(i['request'], i['path'], i['ip'], i['time_micro'], i['time'])
