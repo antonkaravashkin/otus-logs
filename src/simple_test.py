@@ -2,13 +2,13 @@ import re
 from heapq import nlargest
 import argparse
 from collections import Counter
-
+import json
 
 parser = argparse.ArgumentParser(
-    description='Лаг парсер, на примере acces.log')
+    description='Лог парсер, на примере acces.log')
 
 parser.add_argument('log_file', metavar='LOG_FILE', type=argparse.FileType('r'),
-                    help='Указывает путь до файла с логом')
+                    help='Укажите путь до файла с логом *.log')
 
 
 parts = [
@@ -30,7 +30,9 @@ pattern = re.compile(r'\s+'.join(parts)+r'\s*\Z')
 
 args = parser.parse_args()
 log_data = []
-
+requests_metod_dict = {}
+ips_dict = {}
+top3_requests = []
 
 for line in args.log_file:
     log_data.append(pattern.match(line).groupdict())
@@ -48,12 +50,25 @@ print(f"Всего запросов в лог файле: {common_requests}")
 
 print("Количество запросов по HTTP-методам: ")
 for x in reques_method.most_common():
+    requests_metod_dict[x[0]] = x[1]
     print("\t%s Встречается %d раз" % x)
 
 print("Top 3 IP адресов, с которых были сделаны запросы: ")
 for x in ips.most_common(3):
+    ips_dict[x[0]] = x[1]
     print("\t%s стучался к нам %d раз" % x)
 
 print("Top 3 самых длительных запросов: ")
-for i in sorted(group_files, reverse=False, key=lambda x: x['time_micro'])[:3]:
-    print(i['request'], i['path'], i['ip'], i['time_micro'], i['time'])
+for x in sorted(group_files, reverse=False, key=lambda x: x['time_micro'])[:3]:
+    top3_requests.append(x)
+    print("\t%s" % x)
+
+
+json_output = [{"requests count": common_requests,
+                "requests by http": requests_metod_dict,
+                "top 3 ips": ips_dict,
+                "top 3 longest requests": top3_requests
+                }]
+
+with open("results.json", "w") as result:
+    json.dump(json_output, result, indent=4)

@@ -1,0 +1,59 @@
+[
+    {
+        "requests": 3216723,
+        "requests by http": {
+            "\"GET": 2247848,
+            "\"POST": 918794,
+            "\"HEAD": 49971,
+            "\"PUT": 70,
+            "\"OPTIONS": 39,
+            "\"DELETE": 1
+        },
+        "top 3 ips": {
+            "193.106.31.130": 235209,
+            "198.50.156.189": 167812,
+            "5.112.235.245": 166722
+        },
+        "top 3 longest requests": [
+            {
+                "ip": "62.93.172.245",
+                "remote_log_name": "-",
+                "userid": "-",
+                "time": "23/Dec/2015:07:27:57 +0100",
+                "request": "\"POST",
+                "path": "/administrator/index.php HTTP/1.1\"",
+                "status": "200",
+                "size": "4494",
+                "referrer": "-",
+                "agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/23.0.1271.17 Safari/537.11",
+                "time_micro": "10000"
+            },
+            {
+                "ip": "213.162.68.113",
+                "remote_log_name": "-",
+                "userid": "-",
+                "time": "06/Jan/2016:18:47:57 +0100",
+                "request": "\"GET",
+                "path": "/media/system/css/modal.css HTTP/1.1\"",
+                "status": "200",
+                "size": "1159",
+                "referrer": "http://www.almhuette-raith.at/index.php?option=com_phocagallery&view=category&id=1&Itemid=53",
+                "agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9",
+                "time_micro": "10000"
+            },
+            {
+                "ip": "194.166.55.43",
+                "remote_log_name": "-",
+                "userid": "-",
+                "time": "06/Jan/2016:21:29:02 +0100",
+                "request": "\"GET",
+                "path": "/images/phocagallery/almhuette/thumbs/phoca_thumb_m_terasse.jpg HTTP/1.1\"",
+                "status": "200",
+                "size": "5126",
+                "referrer": "http://www.almhuette-raith.at/index.php?option=com_phocagallery&view=category&id=1&Itemid=53",
+                "agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13C75 Safari/601.1",
+                "time_micro": "10000"
+            }
+        ]
+    }
+]
