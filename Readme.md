@@ -4,7 +4,7 @@
 
 Потренироваться писать парсеры для логов.
 
-link to regex https://regex101.com/r/SfkEYA/1
+link to regex https://regex101.com/r/xDfSqj/4
 
 # Принцип работы
 
